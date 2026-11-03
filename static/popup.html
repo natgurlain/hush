@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hush</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        width: 380px;
+        background: var(--surface);
+      }
+      .wrap {
+        padding: 14px 16px 12px;
+        display: grid;
+        gap: 12px;
+      }
+      .bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .bar-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 12.5px;
+        color: var(--text-2);
+        font-weight: 550;
+      }
+      .banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px 10px 14px;
+        border-radius: var(--radius);
+        background: var(--free-soft);
+        font-size: 13px;
+      }
+      .banner.off {
+        background: var(--surface-2);
+        color: var(--text-2);
+      }
+      .rail {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 6px;
+      }
+      .tile {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        gap: 4px;
+        padding: 7px 0 5px;
+        border: 1px solid transparent;
+        border-radius: 13px;
+        background: transparent;
+        cursor: pointer;
+        color: var(--text-2);
+        font-size: 10.5px;
+        font-weight: 550;
+        transition: background 0.15s, border-color 0.15s, color 0.15s;
+      }
+      .tile:hover {
+        background: var(--surface-2);
+      }
+      .tile[aria-pressed="true"] {
+        background: var(--surface-2);
+        border-color: var(--border-strong);
+        color: var(--text);
+      }
+      .tile .favicon {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        transition: filter 0.15s, opacity 0.15s;
+      }
+      .tile.site-off .favicon {
+        filter: grayscale(1);
+        opacity: 0.5;
+      }
+      .tile .here {
+        position: absolute;
+        top: 6px;
+        right: 9px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 0 2px var(--surface);
+      }
+      .panel {
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+      }
+      .panel-head {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 14px;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface-2);
+      }
+      .panel-head .favicon {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+      }
+      .panel-title {
+        flex: 1;
+        min-width: 0;
+        display: grid;
+      }
+      .panel-title b {
+        font-size: 15px;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+      }
+      .panel-title span {
+        font-size: 12px;
+        color: var(--text-3);
+      }
+      .panel-title .count {
+        color: var(--accent-strong);
+        font-weight: 600;
+      }
+      .rows {
+        list-style: none;
+        margin: 0;
+        padding: 2px 0;
+        max-height: 372px;
+        overflow-y: auto;
+        transition: opacity 0.2s;
+      }
+      body:has(#banner:not([hidden])) .rows {
+        max-height: 312px;
+      }
+      .rows.dim {
+        opacity: 0.45;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 8px 14px;
+      }
+      .row + .row {
+        border-top: 1px solid var(--border);
+      }
+      .row-text {
+        flex: 1;
+        min-width: 0;
+        display: grid;
+        gap: 1px;
+      }
+      .row-text b {
+        font-size: 13.5px;
+        font-weight: 550;
+      }
+      .row-text span {
+        font-size: 12px;
+        line-height: 1.35;
+        color: var(--text-3);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .segmented.sm {
+        padding: 2px;
+        border-radius: 10px;
+      }
+      .segmented.sm button {
+        height: 26px;
+        padding: 0 10px;
+        font-size: 12px;
+        border-radius: 8px;
+      }
+      .reload {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 16px;
+        font-size: 12.5px;
+        color: var(--text-2);
+        background: var(--accent-soft);
+      }
+      .footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-3);
+      }
+      .footer a {
+        color: var(--text-2);
+      }
+    </style>
+    <script src="sites.js"></script>
+    <script type="module" src="popup.js"></script>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="bar">
+        <span class="brand"><span class="logo"></span>Hush</span>
+        <label class="bar-right"><span id="global-label">On</span><span id="global-switch"></span></label>
+      </div>
+      <div class="banner" id="banner" hidden></div>
+      <nav class="rail" id="rail" aria-label="Sites"></nav>
+      <section class="panel" id="panel"></section>
+      <div class="footer">
+        <button class="btn sm" id="pause">Pause 15 min</button>
+        <span>
+          by <a href="https://x.com/natgurlain" target="_blank" rel="noopener">@natgurlain</a> ·
+          <a href="https://github.com/natgurlain/hush" target="_blank" rel="noopener">GitHub</a>
+        </span>
+      </div>
+    </div>
+  </body>
+</html>

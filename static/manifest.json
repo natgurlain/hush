@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Hush",
+  "version": "0.1.0",
+  "description": "Hide feeds, Shorts, trends and other distractions on YouTube, X, Reddit, Facebook, Instagram and LinkedIn.",
+  "homepage_url": "https://github.com/natgurlain/hush",
+  "permissions": ["storage", "alarms", "tabs", "favicon"],
+  "background": { "service_worker": "background.js" },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Hush",
+    "default_icon": { "16": "icons/on-16.png", "32": "icons/on-32.png", "48": "icons/on-48.png" }
+  },
+  "icons": { "16": "icons/on-16.png", "32": "icons/on-32.png", "48": "icons/on-48.png", "128": "icons/on-128.png" },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.x.com/*",
+        "*://*.twitter.com/*",
+        "*://*.reddit.com/*",
+        "*://*.facebook.com/*",
+        "*://*.instagram.com/*",
+        "*://*.linkedin.com/*"
+      ],
+      "js": ["sites.js", "content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
