@@ -5,30 +5,31 @@
     <title>Hush</title>
     <link rel="stylesheet" href="styles.css" />
     <style>
-      /* Browsers cap popups at 600px tall. The page itself never scrolls: only the feature list does. */
-      html,
-      body {
-        overflow: hidden;
+      /* Browsers cap popups at 600px tall. Longer lists scroll the whole popup once, with the top bar and footer
+         pinned, rather than a second scroller inside the panel. */
+      html {
+        scrollbar-width: thin;
+        scrollbar-color: var(--border-strong) transparent;
       }
       body {
         width: 380px;
         background: var(--surface);
       }
       .wrap {
-        box-sizing: border-box;
-        max-height: 600px;
-        padding: 14px 16px 12px;
-        display: flex;
-        flex-direction: column;
+        padding: 0 16px;
+        display: grid;
         gap: 12px;
       }
-      .wrap > * {
-        flex: none;
-      }
       .bar {
+        position: sticky;
+        top: 0;
+        z-index: 2;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin: 0 -16px;
+        padding: 14px 16px 2px;
+        background: var(--surface);
       }
       .bar-right {
         display: flex;
@@ -107,18 +108,6 @@
         box-shadow: var(--shadow-sm);
         overflow: hidden;
       }
-      .wrap > .panel {
-        flex: 0 1 auto;
-        min-height: 0;
-        display: flex;
-        flex-direction: column;
-      }
-      .wrap > .panel > * {
-        flex: none;
-      }
-      .wrap > .panel > .rows {
-        flex: 0 1 auto;
-      }
       .panel-head {
         display: flex;
         align-items: center;
@@ -154,9 +143,6 @@
         list-style: none;
         margin: 0;
         padding: 2px 0;
-        min-height: 0;
-        overflow-y: auto;
-        overscroll-behavior: contain;
         transition: opacity 0.2s;
       }
       .rows.dim {
@@ -211,6 +197,13 @@
         background: var(--accent-soft);
       }
       .footer {
+        position: sticky;
+        bottom: 0;
+        z-index: 2;
+        margin: 0 -16px;
+        padding: 10px 16px 12px;
+        background: var(--surface);
+        border-top: 1px solid var(--border);
         display: flex;
         align-items: center;
         justify-content: space-between;

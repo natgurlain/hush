@@ -320,9 +320,16 @@ const HUSH_SITES: HushSite[] = [
         kind: "toggle",
         id: "feed",
         label: "News Feed",
-        hint: "Groups, Messenger and profiles still work",
+        hint: "The home page; groups and profiles still work",
         default: true,
-        hide: [":root[data-hush-page='home'] [role='main'] [role='feed']"],
+        // Facebook no longer always marks the feed with role="feed", so the whole middle column of the home page goes,
+        // with the older feed markers kept in case [role='main'] changes.
+        hide: [
+          ":root[data-hush-page='home'] [role='main']",
+          ":root[data-hush-page='home'] [role='feed']",
+          ":root[data-hush-page='home'] [data-pagelet='MainFeed']",
+          ":root[data-hush-page='home'] [data-pagelet^='FeedUnit']",
+        ],
       },
       {
         kind: "toggle",
