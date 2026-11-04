@@ -5,14 +5,25 @@
     <title>Hush</title>
     <link rel="stylesheet" href="styles.css" />
     <style>
+      /* Browsers cap popups at 600px tall. The page itself never scrolls: only the feature list does. */
+      html,
+      body {
+        overflow: hidden;
+      }
       body {
         width: 380px;
         background: var(--surface);
       }
       .wrap {
+        box-sizing: border-box;
+        max-height: 600px;
         padding: 14px 16px 12px;
-        display: grid;
+        display: flex;
+        flex-direction: column;
         gap: 12px;
+      }
+      .wrap > * {
+        flex: none;
       }
       .bar {
         display: flex;
@@ -96,6 +107,18 @@
         box-shadow: var(--shadow-sm);
         overflow: hidden;
       }
+      .wrap > .panel {
+        flex: 0 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .wrap > .panel > * {
+        flex: none;
+      }
+      .wrap > .panel > .rows {
+        flex: 0 1 auto;
+      }
       .panel-head {
         display: flex;
         align-items: center;
@@ -131,12 +154,10 @@
         list-style: none;
         margin: 0;
         padding: 2px 0;
-        max-height: 372px;
+        min-height: 0;
         overflow-y: auto;
+        overscroll-behavior: contain;
         transition: opacity 0.2s;
-      }
-      body:has(#banner:not([hidden])) .rows {
-        max-height: 312px;
       }
       .rows.dim {
         opacity: 0.45;
