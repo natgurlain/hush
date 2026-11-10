@@ -200,7 +200,24 @@ const HUSH_SITES: HushSite[] = [
         label: "Promoted posts",
         hint: "Ads in the timeline",
         default: true,
-        hide: ["[data-testid='cellInnerDiv']:has([data-testid='placementTracking'])"],
+        // X marks ads only with an "Ad" label (placementTracking also wraps every video, so it can't be used). X reuses
+        // timeline cells for other posts, so each tick re-checks every cell and clears tags that no longer apply.
+        hide: ["[data-testid='cellInnerDiv'][data-hush-tag='ad']"],
+        run: () => {
+          for (const cell of document.querySelectorAll<HTMLElement>("[data-testid='cellInnerDiv']")) {
+            const article = cell.querySelector("article[data-testid='tweet']");
+            const ad =
+              !!article &&
+              [...article.querySelectorAll("span")].some(
+                (span) =>
+                  !span.childElementCount &&
+                  (span.textContent === "Ad" || span.textContent === "Promoted") &&
+                  !span.closest("[data-testid='tweetText'], [data-testid='User-Name']"),
+              );
+            if (ad) cell.dataset.hushTag = "ad";
+            else if (cell.dataset.hushTag === "ad") delete cell.dataset.hushTag;
+          }
+        },
       },
       {
         kind: "toggle",
