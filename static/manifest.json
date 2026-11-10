@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Hush",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "description": "Hide feeds, Shorts, trends and other distractions on YouTube, X, Reddit, Facebook, Instagram and LinkedIn.",
   "homepage_url": "https://github.com/natgurlain/hush",
   "permissions": ["storage", "alarms", "tabs", "favicon"],
